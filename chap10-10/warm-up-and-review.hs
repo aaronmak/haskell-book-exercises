@@ -3,33 +3,68 @@ main :: IO ()
 stops  = "pbtdkg"
 vowels = "aeiou"
 
-appendCharToChars :: Char -> [Char] -> [[Char]]
-appendCharToChars c xs =
+nouns = ["boy", "fox"]
+verbs = ["run", "walk"]
+
+mapElement :: a -> [a] -> [[a]]
+mapElement c xs =
   map (([c] ++) . (: [])) xs
 
-combinationChars :: [Char] -> [Char] -> [[Char]]
-combinationChars [] ys = []
-combinationChars (x:xs) ys =
-  appendCharToChars x ys ++ combinationChars xs ys
+combine :: [a] -> [a] -> [[a]]
+combine [] ys = []
+combine (x:xs) ys =
+  mapElement x ys ++ combine xs ys
 
-combinations :: [Char] -> [[Char]] -> [[Char]]
+combinations :: [a] -> [[a]] -> [[a]]
 combinations [] yss = []
 combinations (x:xs) yss =
   map ([x] ++) yss ++ combinations xs yss
 
-sentenceToTuple :: [Char] -> (Char, Char, Char)
-sentenceToTuple xs = (xs !! 0, xs !! 1, xs !! 2)
+firstThree :: [a] -> (a, a, a)
+firstThree (x:y:z:xs) = (x, y, z)
 
-stopVowelStops :: [Char] -> [Char] ->
-                  [(Char, Char, Char)]
+stopVowelStops :: [Char]
+               -> [Char]
+               -> [(Char, Char, Char)]
 stopVowelStops vs ss =
-  map sentenceToTuple $ combinations ss $ combinationChars vs ss
+  map firstThree $ combinations ss $ combine vs ss
 
+firstOfThree :: (a, b, c) -> a
+firstOfThree (x, _, _) = x
+
+filterP :: [(Char, Char, Char)] -> [(Char, Char, Char)]
+filterP xs = filter (\x -> (firstOfThree x) /= 'p') xs
+
+stopVowelStopsStartP vs ss =
+  filterP $ stopVowelStops vs ss
+
+nounVerbNouns :: [[Char]]
+              -> [[Char]]
+              -> [([Char], [Char], [Char])]
+nounVerbNouns nn vs =
+  map firstThree $ combinations nn $ combine vs nn
+
+
+seekritFunc x =
+  div (sum (map length (words x)))
+      (length (words x))
+
+seekritFuncPrecise x = chars / wordCount
+  where
+    wordList = words x
+    chars = realToFrac (sum (map length wordList))
+    wordCount = realToFrac (length wordList)
 
 main = do
   print "------"
-  print $ appendCharToChars 'c' "foo"
-  print $ combinations stops $ combinationChars vowels stops
+  print "---q1---"
+  print $ mapElement 'c' "foo"
+  print $ combine "fo" "ae"
   print $ combinations "fo" ["foo", "abc"]
-  print $ stopVowelStops vowels stops
+  print $ stopVowelStops vowels stops -- (1a)
+  print $ stopVowelStopsStartP vowels stops -- (1b)
+  print $ nounVerbNouns nouns verbs -- (1c)
+  print "---q2---"
+  print $ seekritFunc "hello world"
+  print $ seekritFuncPrecise "hello wo" -- (2)
   print "------"
