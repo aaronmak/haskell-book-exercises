@@ -66,5 +66,6 @@ main = do
   print $ nounVerbNouns nouns verbs -- (1c)
   print "---q2---"
   print $ seekritFunc "hello world"
-  print $ seekritFuncPrecise "hello wo" -- (2)
+  print "---q3---"
+  print $ seekritFuncPrecise "hello wo"
   print "------"
