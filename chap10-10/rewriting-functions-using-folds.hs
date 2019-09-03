@@ -42,25 +42,35 @@ squishAgain = squishMap (\x -> x)
 myMaxiumumBy :: (a -> a -> Ordering)
              -> [a]
              -> a
-myMaxiumumBy f [x] = x
-myMaxiumumBy f (x:y:xs) =
-  if f x y == GT
-  then myMaxiumumBy f (x:xs)
-  else myMaxiumumBy f (y:xs)
+-- myMaxiumumBy f [x] = x
+-- myMaxiumumBy f (x:y:xs) =
+--   if f x y == GT
+--   then myMaxiumumBy f (x:xs)
+--   else myMaxiumumBy f (y:xs)
 
--- get Ordering with f
--- compare ordering
--- if Ordering == GT return value
--- else return old valuelue
+myMaxiumumBy f (x:xs) = foldl (isGT f) x xs
+  where isGT = isOrder GT
+
 
 myMinimumBy :: (a -> a -> Ordering)
              -> [a]
              -> a
-myMinimumBy f [x] = x
-myMinimumBy f (x:y:xs) =
-  if f x y == LT
-  then myMinimumBy f (x:xs)
-  else myMinimumBy f (y:xs)
+-- myMinimumBy f [x] = x
+-- myMinimumBy f (x:y:xs) =
+--   if f x y == LT
+--   then myMinimumBy f (x:xs)
+--   else myMinimumBy f (y:xs)
+--
+
+myMinimumBy f (x:xs) = foldl (isLT f) x xs
+  where isLT = isOrder LT
+
+isOrder :: Ordering -> (a -> a -> Ordering)
+           -> a -> a -> a
+isOrder order f x y =
+  if f x y == order
+  then x
+  else y
 
 main = do
   print "------"
@@ -73,6 +83,10 @@ main = do
   print $ squish ["foo", "bar"]
   print $ squishMap (\x -> [1, x, 3]) [2, 3]
   print $ squishAgain ["foo", "bar"]
-  print $ myMaxiumumBy (\_ _ -> LT) [1, 2]
-  print $ myMinimumBy compare [1, 2]
+  print $ myMaxiumumBy (\_ _ -> GT) [1..10]
+  print $ myMaxiumumBy (\_ _ -> LT) [1..10]
+  print $ myMaxiumumBy compare [1..10]
+  print $ myMinimumBy compare [1..10]
+  print $ myMinimumBy (\_ _ -> GT) [1..10]
+  print $ myMinimumBy (\_ _ -> LT) [1..10]
   print "------"
