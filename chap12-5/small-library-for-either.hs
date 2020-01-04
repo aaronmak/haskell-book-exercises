@@ -49,8 +49,8 @@ eitherMaybe'' :: (b -> c)
               -> Either a b
               -> Maybe c
 eitherMaybe'' f x = either' g (h f) x
-  where g = (\x -> Nothing)
-        h = (\f x -> Just (f x))
+  where g = \x -> Nothing
+        h = \f x -> Just (f x)
 
 main = do
   print $ lefts' [Left 1, Right "a", Left 2, Left 3]
