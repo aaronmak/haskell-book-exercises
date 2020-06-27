@@ -1,6 +1,7 @@
 module Cipher where
 import Data.Char
 
+-- Vigenere Cipher
 main :: IO ()
 
 original = "MEET AT DAWN"
@@ -50,4 +51,10 @@ intToStr xs = map (chr . limitToUpperCase) xs
 strToInt :: [Char] -> [Int]
 strToInt xs = map ord xs
 
-main = print $ encode original code == expected
+-- Chap 13-14 Modifying code Q1
+main = do
+  putStrLn "What would you like to encode?"
+  toEncode <- getLine
+  putStrLn "What would your code be?"
+  code <- getLine
+  putStrLn $ encode toEncode code
